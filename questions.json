@@ -1,27 +1,29 @@
 [
-    {
-      "question": "Which programming language is known as the foundation of Android development?",
-      "options": ["Python", "C++", "Java", "JavaScript"],
-      "answer": 2
-    },
-    {
-      "question": "Which data structure follows the First In, First Out (FIFO) principle?",
-      "options": ["Stack", "Queue", "Array", "Tree"],
-      "answer": 1
-    },
-    {
-      "question": "What does SQL stand for?",
-      "options": ["Structured Query Language", "Standard Query Language", "Sequential Query Language", "Simple Query Language"],
-      "answer": 0
-    },
-    {
-      "question": "Which layer of the OSI model handles logical addressing?",
-      "options": ["Transport", "Network", "Data Link", "Physical"],
-      "answer": 1
-    },
-    {
-      "question": "Which of the following is NOT a NoSQL database?",
-      "options": ["MongoDB", "Redis", "MySQL", "Cassandra"],
-      "answer": 2
-    }
-  ]
+  {
+    "question": "What does MCA stand for?",
+    "options": ["Master of Computer Application", "Master of Computer Arts", "Master of Creative Application", "Master of Cybersecurity Application"],
+    "answer": 0
+  },
+  {
+    "question": "Which programming language is known as the 'mother of all languages'?",
+    "options": ["Python", "Java", "C", "JavaScript"],
+    "answer": 2
+  },
+  {
+    "question": "Which data structure works on the principle of Last In, First Out (LIFO)?",
+    "options": ["Queue", "Array", "Stack", "Linked List"],
+    "answer": 2
+  },
+  {
+    "question": "What is the main purpose of an operating system?",
+    "options": ["To manage hardware and software resources", "To run the internet", "To design web pages", "To write code"],
+    "answer": 0
+  },
+  {
+    "question": "Which of the following is NOT a relational database?",
+    "options": ["MySQL", "MongoDB", "PostgreSQL", "SQLite"],
+    "answer": 1
+  }
+]
+
+
