@@ -2,7 +2,7 @@ let questions = [];
 let currentQuestion = 0;
 let score = 0;
 let timer;
-let timeLeft = 600; // 10 minutes
+let timeLeft = 180; // 3 minutes
 let startTime;
 let selectedOption = null;
 
@@ -52,7 +52,7 @@ function selectOption(index) {
   });
 }
 
-// Next Question ✅ (Handles Score Update)
+// Next Question 
 document.getElementById('next-btn').onclick = () => {
   if (selectedOption !== null && selectedOption === questions[currentQuestion].answer) {
     score++;
@@ -64,7 +64,7 @@ document.getElementById('next-btn').onclick = () => {
   }
 };
 
-// Previous Question ✅
+// Previous Question 
 document.getElementById('back-btn').onclick = () => {
   if (currentQuestion > 0) {
     currentQuestion--;
@@ -73,7 +73,6 @@ document.getElementById('back-btn').onclick = () => {
   }
 };
 
-// ✅ Count Last Question's Score Before Showing Result
 document.getElementById('check-score-btn').onclick = () => {
   if (selectedOption !== null && selectedOption === questions[currentQuestion].answer) {
     score++;
@@ -99,7 +98,7 @@ function startTimer() {
   }, 1000);
 }
 
-// End Quiz ✅
+// End Quiz 
 function endQuiz() {
   clearInterval(timer);
   const timeTaken = Math.floor((Date.now() - startTime) / 1000);
