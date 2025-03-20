@@ -1,108 +1,102 @@
-
 let questions = [];
-let currentQuestionIndex = 0;
+let currentQuestion = 0;
 let score = 0;
 let timer;
-let timeLeft = 600; // 10 minutes in seconds
-let testStartTime;
+let timeLeft = 180; // 3 minutes
+let startTime;
+let selectedOption = null;
 
-
-// Load JSON Data
-
+// Load Questions
 fetch('questions.json')
   .then(res => res.json())
-  .then(data => {
-    questions = data;
-  })
-  .catch(err => console.error('Failed to load questions:', err));
+  .then(data => questions = data);
 
-// Start Test
-
-document.getElementById('start-btn').addEventListener('click', () => {
+// Start Quiz
+document.getElementById('start-btn').onclick = () => {
+  score = 0;
+  currentQuestion = 0;
+  selectedOption = null;
   document.getElementById('start-container').classList.add('hidden');
   document.getElementById('question-container').classList.remove('hidden');
-  document.getElementById('timer').classList.remove('hidden');
-  
-  testStartTime = Date.now(); // Record start time
+  startTime = Date.now();
   startTimer();
   showQuestion();
-});
+};
 
-// Questions
-
+// Show Question
 function showQuestion() {
-  const question = questions[currentQuestionIndex];
-  document.getElementById('question').textContent = question.question;
+  const q = questions[currentQuestion];
+  document.getElementById('question').textContent = q.question;
+  showOptions(q.options);
+  updateButtons();
+}
 
-  // Load options
+// Show Options
+function showOptions(options) {
   const optionsContainer = document.getElementById('options');
   optionsContainer.innerHTML = '';
-  
-  question.options.forEach((option, index) => {
+  options.forEach((opt, i) => {
     const button = document.createElement('button');
-    button.textContent = option;
-    button.onclick = () => selectAnswer(index, button);
+    button.textContent = opt;
+    button.onclick = () => selectOption(i);
+    if (i === selectedOption) button.classList.add('selected');
     optionsContainer.appendChild(button);
   });
-
-  document.getElementById('next-btn').classList.add('hidden');
 }
 
-// Answer 
-
-function selectAnswer(index, button) {
-  document.querySelectorAll('#options button').forEach(btn => {
-    btn.classList.remove('selected');
+// Select Option
+function selectOption(index) {
+  selectedOption = index;
+  document.querySelectorAll('#options button').forEach((btn, i) => {
+    btn.classList.toggle('selected', i === index);
   });
-
-  button.classList.add('selected');
-
-  if (index === questions[currentQuestionIndex].answer) {
-    score++;
-  }
-
-  document.getElementById('next-btn').classList.remove('hidden');
 }
 
-// Next Button
-
-document.getElementById('next-btn').addEventListener('click', () => {
-  currentQuestionIndex++;
-  if (currentQuestionIndex < questions.length) {
+// Next Question
+document.getElementById('next-btn').onclick = () => {
+  
+    if (selectedOption === questions[currentQuestion].answer) score++;
+    selectedOption = null;
+    currentQuestion++;
     showQuestion();
-  } else {
-    document.getElementById('check-score-btn').classList.remove('hidden');
-    document.getElementById('next-btn').classList.add('hidden');
+  
+};
+
+// Previous Question
+document.getElementById('back-btn').onclick = () => {
+  if (currentQuestion > 0) {
+    currentQuestion--;
+    selectedOption = null;
+    showQuestion();
   }
-});
+};
 
-// Timer Function
+// Update Button Visibility
+function updateButtons() {
+  document.getElementById('back-btn').classList.toggle('hidden', currentQuestion === 0);
+  document.getElementById('next-btn').classList.toggle('hidden', currentQuestion === questions.length - 1);
+  document.getElementById('check-score-btn').classList.toggle('hidden', currentQuestion !== questions.length - 1);
+}
 
+// Timer
 function startTimer() {
   timer = setInterval(() => {
     timeLeft--;
     const minutes = Math.floor(timeLeft / 60);
     const seconds = timeLeft % 60;
-    document.getElementById('timer').textContent = 
-      `Time Left: ${minutes}:${seconds < 10 ? '0' + seconds : seconds}`;
-    
+    document.getElementById('timer').textContent = `${minutes}:${seconds < 10 ? '0' + seconds : seconds}`;
     if (timeLeft <= 0) endQuiz();
   }, 1000);
 }
 
-
-// Show Score
-
-document.getElementById('check-score-btn').addEventListener('click', endQuiz);
+// End Quiz
+document.getElementById('check-score-btn').onclick = endQuiz;
 
 function endQuiz() {
   clearInterval(timer);
-
-  const timeTaken = Math.floor((Date.now() - testStartTime) / 1000); // in seconds
-
+  const timeTaken = Math.floor((Date.now() - startTime) / 1000);
   document.querySelector('.quiz-container').innerHTML = `
-    <h1>Quiz Completed!</h1>
-    <p>Your Score: ${score} / ${questions.length}</p>
+    <h2>Your Score: ${score} / ${questions.length}</h2>
     <p>Time Taken: ${Math.floor(timeTaken / 60)}m ${timeTaken % 60}s</p>
     <button onclick="location.reload()">Restart Quiz</button>
   `;
