@@ -1,90 +1,88 @@
-
 body {
     font-family: Arial, sans-serif;
-    background-color: whitesmoke;
+    background-color: #f4f4f9;
     display: flex;
     justify-content: center;
     align-items: center;
     height: 100vh;
     margin: 0;
-    flex-direction: column;
   }
   
-
-  #timer {
-    font-size: 14px;
-    background-color: #ffcccc;
-    padding: 5px 10px;
-    border-radius: 5px;
-    color: #333;
-    margin-bottom: 5px;
-    margin-right: 25%;
-    align-self: flex-end;
-  }
-  
- 
   .quiz-container {
-    background-color: #ffffff;
-    padding: 30px;
+    background: #fff;
+    padding: 20px;
     width: 400px;
-    box-shadow: 0 4px 8px #0000001a;
-    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    border-radius: 6px;
+    position: relative;
   }
-
+  
+  #timer {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 14px;
+    color: #555;
+  }
+  
   h1 {
-    text-align: center;
-  }
 
+    text-align: center;
+    font-size: 24px;
+    color: #4caf50;
+
+
+
+  }
+  
   button {
-    width: 40%;
+    width: 100%;
     padding: 12px;
-    margin-top: 30px;
-    margin-left: 240px;
-    background-color: #2bbe32;
+    margin-top: 10px;
+    background-color: #4caf50;
     color: white;
     border: none;
-    border-radius: 5px;
+    border-radius: 4px;
     cursor: pointer;
-    transition: background-color 0.3s;
   }
   
   button:hover {
-    background-color: #58c75b;
+    background-color: #60c965;
   }
- 
+  
   #options button {
     width: 100%;
     padding: 10px;
-    margin: 8px 0;
+    margin: 5px 0;
+    background-color: #e0e0e0;
     font-size: 16px;
-    color: black;
-    background-color: #eee;
+    font-weight:400;
+    color: #5f5e5e;
     border: none;
-    border-radius: 5px;
+    border-radius: 4px;
     cursor: pointer;
-    transition: background-color 0.3s;
   }
- 
+  #options button:hover {
+    background-color: #9cd7e9;
+  }
+  
   #options button.selected {
     background-color: #2196f3;
     color: white;
   }
   
-  #options button:hover {
-    background-color: #88c0ee;
-  }
-  
   .hidden {
     display: none;
   }
+  
+  .btn-container {
+    display: flex;
+    gap: 10px;
+  }
+  
+  #back-btn,
+  #next-btn {
+    width: 48%;
+  }
 
-  #result {
-    text-align: center;
-    padding: 20px;
-  }
-  
-  #result h1 {
-    font-size: 24px;
-    color: #70d873;
-  }
-  
+ 
