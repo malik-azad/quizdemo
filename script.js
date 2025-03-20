@@ -2,7 +2,7 @@ let questions = [];
 let currentQuestion = 0;
 let score = 0;
 let timer;
-let timeLeft = 180; // 3 minutes
+let timeLeft = 600; // 10 minutes
 let startTime;
 let selectedOption = null;
 
@@ -52,23 +52,33 @@ function selectOption(index) {
   });
 }
 
-// Next Question
+// Next Question ✅ (Handles Score Update)
 document.getElementById('next-btn').onclick = () => {
-  
-    if (selectedOption === questions[currentQuestion].answer) score++;
-    selectedOption = null;
+  if (selectedOption !== null && selectedOption === questions[currentQuestion].answer) {
+    score++;
+  }
+  selectedOption = null;
+  if (currentQuestion < questions.length - 1) {
     currentQuestion++;
     showQuestion();
-  
+  }
 };
 
-// Previous Question
+// Previous Question ✅
 document.getElementById('back-btn').onclick = () => {
   if (currentQuestion > 0) {
     currentQuestion--;
     selectedOption = null;
     showQuestion();
   }
+};
+
+// ✅ Count Last Question's Score Before Showing Result
+document.getElementById('check-score-btn').onclick = () => {
+  if (selectedOption !== null && selectedOption === questions[currentQuestion].answer) {
+    score++;
+  }
+  endQuiz();
 };
 
 // Update Button Visibility
@@ -89,9 +99,7 @@ function startTimer() {
   }, 1000);
 }
 
-// End Quiz
-document.getElementById('check-score-btn').onclick = endQuiz;
-
+// End Quiz ✅
 function endQuiz() {
   clearInterval(timer);
   const timeTaken = Math.floor((Date.now() - startTime) / 1000);
