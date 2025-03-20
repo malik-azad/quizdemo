@@ -8,21 +8,22 @@
 </head>
 <body>
 
-  <div id="timer">Time Left: 10:00</div>
-
-  <h1>Quiz App</h1>
-
   <div class="quiz-container">
-    
-   
+    <div id="timer">10:00</div>
+
+    <h1>Quiz App</h1>
+
     <div id="start-container">
       <button id="start-btn">Start Test</button>
     </div>
 
     <div id="question-container" class="hidden">
-      <h2 id="question">Loading question...</h2>
+      <h2 id="question"></h2>
       <div id="options"></div>
-      <button id="next-btn" class="hidden">Next</button>
+      <div class="btn-container">
+        <button id="back-btn" class="hidden">Back</button>
+        <button id="next-btn" class="hidden">Next</button>
+      </div>
     </div>
 
     <button id="check-score-btn" class="hidden">Check Score</button>
