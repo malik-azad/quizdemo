@@ -1,21 +1,23 @@
 let questions = [];
 let currentQuestion = 0;
-let score = 0;
+let selectedOptions = [];
 let timer;
 let timeLeft = 180; // 3 minutes
 let startTime;
-let selectedOption = null;
 
 // Load Questions
 fetch('questions.json')
-  .then(res => res.json())
-  .then(data => questions = data);
+  .then(function(res) {
+    return res.json();
+  })
+  .then(function(data) {
+    questions = data;
+  });
 
 // Start Quiz
-document.getElementById('start-btn').onclick = () => {
-  score = 0;
+document.getElementById('start-btn').onclick = function() {
+  selectedOptions = new Array(questions.length).fill(null);
   currentQuestion = 0;
-  selectedOption = null;
   document.getElementById('start-container').classList.add('hidden');
   document.getElementById('question-container').classList.remove('hidden');
   startTime = Date.now();
@@ -25,86 +27,100 @@ document.getElementById('start-btn').onclick = () => {
 
 // Show Question
 function showQuestion() {
-  const q = questions[currentQuestion];
+  let q = questions[currentQuestion];
   document.getElementById('question').textContent = q.question;
-  showOptions(q.options);
-  updateButtons();
-}
-
-// Show Options
-function showOptions(options) {
-  const optionsContainer = document.getElementById('options');
+  let optionsContainer = document.getElementById('options');
   optionsContainer.innerHTML = '';
-  options.forEach((opt, i) => {
-    const button = document.createElement('button');
-    button.textContent = opt;
-    button.onclick = () => selectOption(i);
-    if (i === selectedOption) button.classList.add('selected');
+
+  for (let i = 0; i < q.options.length; i++) {
+    let button = document.createElement('button');
+    button.textContent = q.options[i];
+    if (selectedOptions[currentQuestion] === i) {
+      button.classList.add('selected');
+    }
+    button.onclick = function() {
+      selectOption(i);
+    };
     optionsContainer.appendChild(button);
-  });
+  }
+
+  updateButtons();
 }
 
 // Select Option
 function selectOption(index) {
-  selectedOption = index;
-  document.querySelectorAll('#options button').forEach((btn, i) => {
-    btn.classList.toggle('selected', i === index);
-  });
+  selectedOptions[currentQuestion] = index;
+  showQuestion(); // Refresh options to reflect selection
 }
 
-// Next Question 
-document.getElementById('next-btn').onclick = () => {
-  if (selectedOption !== null && selectedOption === questions[currentQuestion].answer) {
-    score++;
-  }
-  selectedOption = null;
+// Next Question
+document.getElementById('next-btn').onclick = function() {
   if (currentQuestion < questions.length - 1) {
     currentQuestion++;
     showQuestion();
   }
 };
 
-// Previous Question 
-document.getElementById('back-btn').onclick = () => {
+// Previous Question
+document.getElementById('back-btn').onclick = function() {
   if (currentQuestion > 0) {
     currentQuestion--;
-    selectedOption = null;
     showQuestion();
   }
 };
 
-document.getElementById('check-score-btn').onclick = () => {
-  if (selectedOption !== null && selectedOption === questions[currentQuestion].answer) {
-    score++;
-  }
-  endQuiz();
-};
-
-// Update Button Visibility
-function updateButtons() {
-  document.getElementById('back-btn').classList.toggle('hidden', currentQuestion === 0);
-  document.getElementById('next-btn').classList.toggle('hidden', currentQuestion === questions.length - 1);
-  document.getElementById('check-score-btn').classList.toggle('hidden', currentQuestion !== questions.length - 1);
-}
-
 // Timer
 function startTimer() {
-  timer = setInterval(() => {
+  timer = setInterval(function() {
     timeLeft--;
-    const minutes = Math.floor(timeLeft / 60);
-    const seconds = timeLeft % 60;
-    document.getElementById('timer').textContent = `${minutes}:${seconds < 10 ? '0' + seconds : seconds}`;
-    if (timeLeft <= 0) endQuiz();
+    let minutes = Math.floor(timeLeft / 60);
+    let seconds = timeLeft % 60;
+    if (seconds < 10) {
+      seconds = '0' + seconds;
+    }
+    document.getElementById('timer').textContent = minutes + ':' + seconds;
+    if (timeLeft <= 0) {
+      endQuiz();
+    }
   }, 1000);
 }
 
-// End Quiz 
+// End Quiz
+document.getElementById('check-score-btn').onclick = function() {
+  endQuiz();
+};
+
 function endQuiz() {
   clearInterval(timer);
-  const timeTaken = Math.floor((Date.now() - startTime) / 1000);
+  let timeTaken = Math.floor((Date.now() - startTime) / 1000);
+
+  // Calculate score 
+  let score = 0;
+  for (let i = 0; i < questions.length; i++) {
+    if (selectedOptions[i] === questions[i].answer) {
+      score++;
+    }
+  }
+
   document.querySelector('.quiz-container').innerHTML = `
     <h2>Your Score: ${score} / ${questions.length}</h2>
     <p>Time Taken: ${Math.floor(timeTaken / 60)}m ${timeTaken % 60}s</p>
     <button onclick="location.reload()">Restart Quiz</button>
   `;
+}
+
+function updateButtons() {
+  if (currentQuestion === 0) {
+    document.getElementById('back-btn').classList.add('hidden');
+  } else {
+    document.getElementById('back-btn').classList.remove('hidden');
+  }
+
+  if (currentQuestion === questions.length - 1) {
+    document.getElementById('next-btn').classList.add('hidden');
+    document.getElementById('check-score-btn').classList.remove('hidden');
+  } else {
+    document.getElementById('next-btn').classList.remove('hidden');
+    document.getElementById('check-score-btn').classList.add('hidden');
+  }
 }
